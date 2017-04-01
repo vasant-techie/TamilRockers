@@ -20,14 +20,23 @@ public class Constants {
 	public static final Integer LOW_SALARY_VAL = Integer.parseInt(props.getProperty("lowsal"));
 	public static final Integer MID_SALARY_VAL = Integer.parseInt(props.getProperty("midsal"));
 	public static final Integer HIGH_SALARY_VAL = Integer.parseInt(props.getProperty("highsal"));
-	public static final String LOW_SAL_NORMAL_CREDIT_VAL = props.getProperty("lowsal_normal_credit");
-	public static final String LOW_SAL_NORMAL_DEBIT_VAL = props.getProperty("lowsal_normal_debit");
-	public static final String MID_SAL_NORMAL_CREDIT_VAL = props.getProperty("midsal_normal_credit");
+	public static final Integer LOW_SAL_NORMAL_CREDIT_VAL = Integer.parseInt(props.getProperty("lowsal_normal_credit"));
+	public static final Integer LOW_SAL_NORMAL_DEBIT_VAL = Integer.parseInt(props.getProperty("lowsal_normal_debit"));
+	public static final Integer MID_SAL_NORMAL_CREDIT_VAL = Integer.parseInt(props.getProperty("midsal_normal_credit"));
+	public static final Integer MID_SAL_NORMAL_DEBIT_VAL = Integer.parseInt(props.getProperty("midsal_normal_debit"));
+	public static final Integer HIGH_SAL_NORMAL_CREDIT_VAL = Integer.parseInt(props.getProperty("highsal_normal_credit"));
+	public static final Integer HIGH_SAL_NORMAL_DEBIT_VAL = Integer.parseInt(props.getProperty("highsal_normal_debit"));
 	public static final Integer LOW_SAL_CUST_PERCENTAGE = Integer.parseInt(props.getProperty("lowsal_cust_count"));
 	public static final Integer MID_SAL_CUST_PERCENTAGE = Integer.parseInt(props.getProperty("midsal_cust_count"));
 	public static final Integer HIGH_SAL_CUST_PERCENTAGE = Integer.parseInt(props.getProperty("highsal_cust_count"));
 	public static final Integer NUM_OF_CUSTOMERS = Integer.parseInt(props.getProperty("number_of_customers"));
 	public static final Integer CUST_ID_BEGIN_VAL = Integer.parseInt(props.getProperty("cust_id_begin_value"));
+	public static final String FROM_DATE = props.getProperty("fromDate");
+	public static final String TO_DATE = props.getProperty("toDate"); 
+	public static final String THRESHOLD_DATE = props.getProperty("thresholdDate");
+	public static final String DATE_FORMAT = "dd/MM/yyyy";
+	public static final Integer DEBIT_TXN_CODE = 0;
+	public static final Integer CREDIT_TXN_CODE = 1;
 	
 	private static void loadProperties() 
 	{
