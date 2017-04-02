@@ -12,6 +12,7 @@ public class CustomerDataGen
 {
 			
 	private Integer customerId = Constants.CUST_ID_BEGIN_VAL;
+	private Integer count = 0;
 	
 	public void generateCustomerMasterData()
 	{
@@ -38,6 +39,7 @@ public class CustomerDataGen
 		StringBuilder custRecord = new StringBuilder();
 		for(int iter = 0; iter < lowSalCount; iter++)
 		{
+			count++;
 			custRecord.setLength(0);
 			//Customer Id
 			customerId = generateCustId(customerId);
@@ -75,6 +77,6 @@ public class CustomerDataGen
 	
 	private String generateCustomerName(int custId)
 	{
-		return "dummy";
+		return Constants.CUSTOMER_NAME + count;
 	}
 }

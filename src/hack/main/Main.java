@@ -1,5 +1,8 @@
 package hack.main;
 
+import java.util.List;
+
+import hack.intelligence.Intelligence;
 import hack.main.randomgen.CustomerDataGen;
 import hack.main.randomgen.TransactionsGenerator;
 
@@ -9,7 +12,9 @@ public class Main {
 		CustomerDataGen custGen = new CustomerDataGen();
 		custGen.generateCustomerMasterData();
 		
-		TransactionsGenerator txnGen = new TransactionsGenerator();
+		List<Integer> customerId = Intelligence.calculateFraudCustomers();
+		
+		TransactionsGenerator txnGen = new TransactionsGenerator(customerId);
 		txnGen.generateTransData();
 
 	}

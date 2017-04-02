@@ -71,7 +71,7 @@ public class DateUtil
 	
 	public static Date parseDateInCustomFormat(String date, String format)
 	{
-		DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat sourceFormat = new SimpleDateFormat(format);
 		try 
 		{
 			return sourceFormat.parse(date);
@@ -115,4 +115,11 @@ public class DateUtil
         for (int i=1; i<=10; i++)
             System.out.println("Date = " + rnd.generateDateInBetween(dMin, dMax));
     }
+
+
+	public static String formatDate(Date date, String dateFormat) 
+	{
+		DateFormat sourceFormat = new SimpleDateFormat(dateFormat);
+		return sourceFormat.format(date);
+	}
 }

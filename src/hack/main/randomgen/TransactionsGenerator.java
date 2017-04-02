@@ -8,16 +8,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-
-import org.apache.commons.io.FileUtils;
+import java.util.List;
 
 import hack.constants.Constants;
 import hack.constants.SalaryLevel;
 import hack.util.DateUtil;
+import hack.util.Utility;
 
 public class TransactionsGenerator 
 {
 
+	List<Integer> fraudCustomers;
+	
+	public TransactionsGenerator(List<Integer> fraudCustomers)
+	{
+		this.fraudCustomers = fraudCustomers;
+	}
 	
 	public void generateTransData()
 	{
@@ -79,13 +85,25 @@ public class TransactionsGenerator
 
 	private void generateTxnsForLowSalaried(Integer customerId, Integer salary, BufferedWriter fileWriter) 
 	{
-		generateCreditTxn(customerId, Constants.LOW_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, fileWriter);
-		generateDebitTxn(customerId, Constants.LOW_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, fileWriter);
+		//Normal Transaction
+		generateTxn(customerId, Constants.LOW_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.LOW_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 		
-		
+		//if(fraudCustomers.contains(customerId))
+		//{
+			//Threshold Transaction
+			generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		//}
+		//else
+		{
+			//Fraudulant Transaction
+			generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		}
 	}
 
-	private void generateCreditTxn(Integer customerId, Integer lowSalNormalCreditVal, String fromDateStr, String thresholdDateStr, BufferedWriter fileWriter) 
+	private void generateTxn(Integer customerId, Integer lowSalNormalCreditVal, String fromDateStr, String thresholdDateStr, Integer txnCode, BufferedWriter fileWriter) 
 	{
 		Date fromDate = DateUtil.parseDateInCustomFormat(fromDateStr, Constants.DATE_FORMAT);
 		Date thresholdDate = DateUtil.parseDateInCustomFormat(thresholdDateStr, Constants.DATE_FORMAT);
@@ -94,7 +112,7 @@ public class TransactionsGenerator
 		Date date = DateUtil.parseDateInCustomFormat(fromDateStr, Constants.DATE_FORMAT);
 		for(int iter = 0; iter < numberOfMonthsBetween; iter++)
 		{
-			generateTxnForAMonth(customerId, lowSalNormalCreditVal, date, fileWriter, Constants.CREDIT_TXN_CODE);
+			generateTxnForAMonth(customerId, lowSalNormalCreditVal, date, fileWriter, txnCode);
 			date = DateUtil.addOneMonthToDate(date);
 		}
 	}
@@ -111,11 +129,16 @@ public class TransactionsGenerator
 			
 			//Transaction Date
 			Date curDate = DateUtil.generateDateInBetween(beginDate, endDate);
-			record.append(curDate);
+			String dateFormatted = DateUtil.formatDate(curDate, Constants.DATE_FORMAT);
+			record.append(dateFormatted);
 			record.append(Constants.FILE_DELIMITER);
 			
 			//Customer Id
 			record.append(customerId);
+			record.append(Constants.FILE_DELIMITER);
+			
+			//Transaction Amount
+			record.append(Utility.generateRandomNumberBetween(Constants.MIN_TXN_AMOUNT, Constants.MAX_TXN_AMOUNT));
 			record.append(Constants.FILE_DELIMITER);
 			
 			//Transaction Code
@@ -131,11 +154,6 @@ public class TransactionsGenerator
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private void generateDebitTxn(Integer customerId, Integer lowSalNormalDebitVal, String toDate, String thresholdDate, BufferedWriter fileWriter) 
-	{
-		
 	}
 
 	private SalaryLevel getSalaryLevel(Integer salary) 
