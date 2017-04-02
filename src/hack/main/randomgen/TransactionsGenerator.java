@@ -95,6 +95,7 @@ public class TransactionsGenerator
 		for(int iter = 0; iter < numberOfMonthsBetween; iter++)
 		{
 			generateTxnForAMonth(customerId, lowSalNormalCreditVal, date, fileWriter, Constants.CREDIT_TXN_CODE);
+			date = DateUtil.addOneMonthToDate(date);
 		}
 	}
 

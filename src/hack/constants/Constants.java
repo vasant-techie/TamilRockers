@@ -34,16 +34,16 @@ public class Constants {
 	public static final String FROM_DATE = props.getProperty("fromDate");
 	public static final String TO_DATE = props.getProperty("toDate"); 
 	public static final String THRESHOLD_DATE = props.getProperty("thresholdDate");
-	public static final String DATE_FORMAT = "dd/MM/yyyy";
-	public static final Integer DEBIT_TXN_CODE = 0;
-	public static final Integer CREDIT_TXN_CODE = 1;
+	public static final String DATE_FORMAT = props.getProperty("dateFormat");
+	public static final Integer DEBIT_TXN_CODE = Integer.parseInt(props.getProperty("debit_txn_code"));
+	public static final Integer CREDIT_TXN_CODE = Integer.parseInt(props.getProperty("credit_txn_code"));
 	public static final String LOW_SALARY_FILE = props.getProperty("lowSalaryFilePath");
 	public static final String MID_SALARY_FILE =props.getProperty("MediumSalaryFilePath");
 	public static final String HIGH_SALARY_FILE = props.getProperty("HighSalaryFilePath"); 
 	
-	public static final String LOW_SALARY_CODE = "0";
-	public static final String MID_SALARY_CODE ="1";
-	public static final String HIGH_SALARY_CODE = "2"; 
+	public static final String LOW_SALARY_CODE = props.getProperty("lowSalaryCode"); 
+	public static final String MID_SALARY_CODE = props.getProperty("midSalaryCode"); 
+	public static final String HIGH_SALARY_CODE = props.getProperty("highSalaryCode"); 
 	
 	private static void loadProperties() 
 	{
