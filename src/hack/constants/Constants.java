@@ -50,6 +50,7 @@ public class Constants {
 	public static final Integer FRAUD_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("fraud_cust_percentage"));
 	public static final String CUSTOMER_NAME = props.getProperty("customerName");
 	
+	public static final String TXN_FILE_DATE_FORMAT = props.getProperty("txnFileDateFormat");
 	private static void loadProperties() 
 	{
 		try 

@@ -129,7 +129,7 @@ public class TransactionsGenerator
 			
 			//Transaction Date
 			Date curDate = DateUtil.generateDateInBetween(beginDate, endDate);
-			String dateFormatted = DateUtil.formatDate(curDate, Constants.DATE_FORMAT);
+			String dateFormatted = DateUtil.formatDate(curDate, Constants.TXN_FILE_DATE_FORMAT);
 			record.append(dateFormatted);
 			record.append(Constants.FILE_DELIMITER);
 			
