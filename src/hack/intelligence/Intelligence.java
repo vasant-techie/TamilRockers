@@ -19,6 +19,7 @@ public class Intelligence {
 	
 	public static Set<Integer> calculateFraudCustomers() 
 	{
+		System.out.println("Pre-Calculating Fraud Customers..");
 		Set<Integer> fraudCustList = new HashSet<Integer>();
 		
 		List<Integer> custIdList = DBUtility.fetchCustomerIds();
@@ -36,11 +37,13 @@ public class Intelligence {
 				}
 			}
 		}
+		System.out.println("Calculated fraud cust count - " + fraudCustList.size());
 		
+		writeToFile(fraudCustList);
 		return fraudCustList;
 	}
 	
-	public static void writeToFile(Set<Integer> fraudCustList)
+	private static void writeToFile(Set<Integer> fraudCustList)
 	{
 		File fraudCustFile = FileUtils.getFile(Constants.SELECTED_FRAUD_CUST_FILE);
 		FileUtils.deleteQuietly(fraudCustFile);
