@@ -1,13 +1,10 @@
 package hack.pojo;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
 
 public class MasterPojo {
 	
 	private String firstName ;
-    private int salary;
+    private float salary;
 	private int custId;
 	private int salariedType;
 	
@@ -21,7 +18,7 @@ public class MasterPojo {
 	public float getSalary() {
 		return salary;
 	}
-	public void setSalary(int salary) {
+	public void setSalary(float salary) {
 		this.salary = salary;
 	}
 	public int getCustId() {

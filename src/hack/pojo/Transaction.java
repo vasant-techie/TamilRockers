@@ -5,8 +5,8 @@ import java.util.Date;
 public class Transaction {
 	
 	private Date transDate ;
-	private String custId ;
-	private int amount;
+	private int custId ;
+	private float amount;
 	private int debitrCredit;
 	
 	
@@ -16,16 +16,16 @@ public class Transaction {
 	public void setTransDate(Date transDate) {
 		this.transDate = transDate;
 	}
-	public String getCustId() {
+	public int getCustId() {
 		return custId;
 	}
-	public void setCustId(String custId) {
+	public void setCustId(int custId) {
 		this.custId = custId;
 	}
 	public float getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
 	public int getDebitrCredit() {

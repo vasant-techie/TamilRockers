@@ -30,6 +30,7 @@ public class ReadStringFromFile {
 		List<Transaction> objTransLst = MasterTransLst.getTranDataLst();
 		MasterTransPojo objMasTransDTO = getCreditAndDebitRecord(objTransLst);
 		Map<String, List<Transaction>> transactionMap = MasterTransLst.getTransactionMap();
+		/*
 		File file = new File(Constants.LOW_SALARY_FILE);
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -52,7 +53,7 @@ public class ReadStringFromFile {
 				}
 
 			}
-		}
+		}*/
 	}
 
 	public static MasterTransPojo getCreditAndDebitRecord(List<Transaction> objTransLst) {
@@ -96,9 +97,19 @@ public class ReadStringFromFile {
 		List<String> itemsTrans = new ArrayList<String>();
 		File file = new File(fName);
 		File fileTrans = new File(ftName);
-		File fileLow = new File(fileLowPath);
-		File fileMedium = new File(fileMidPath);
-		File fileHigh = new File(fileHighPath);
+		
+		//File fileLow = new File(fileLowPath);
+		//File fileMedium = new File(fileMidPath);
+		//File fileHigh = new File(fileHighPath);
+		
+		File fileLow = FileUtils.getFile(fileLowPath);
+		File fileMedium = FileUtils.getFile(fileMidPath);
+		File fileHigh = FileUtils.getFile(fileHighPath);
+		
+		//Added to remove the existing files before writing
+		FileUtils.deleteQuietly(fileLow);
+		FileUtils.deleteQuietly(fileMedium);
+		FileUtils.deleteQuietly(fileHigh);
 
 		FileReader fileReader = new FileReader(file);
 		FileReader fileReaderTrans = new FileReader(fileTrans);
@@ -109,7 +120,7 @@ public class ReadStringFromFile {
 		String transLine;
 		String salary = "";
 
-		if (fName.equalsIgnoreCase("MasterData.txt")) {
+		if (fName.equalsIgnoreCase(Constants.CUST_DATA_FILE_NAME)) {
 			bufferedReader.readLine();
 
 			while ((line = bufferedReader.readLine()) != null) {
@@ -133,7 +144,7 @@ public class ReadStringFromFile {
 
 		}
 
-		if (ftName.equalsIgnoreCase("TransactionData.txt")) {
+		if (ftName.equalsIgnoreCase(Constants.TXN_DATA_FILE_NAME)) {
 			bufferedReaderTrans.readLine();
 			while ((transLine = bufferedReaderTrans.readLine()) != null) {
 				stringBuffer.append(transLine);
@@ -141,18 +152,18 @@ public class ReadStringFromFile {
 				itemsTrans = Arrays.asList(transLine.split("\\s*" + Constants.FILE_DELIMITER + "\\s*"));
 
 				tc.setTransDate(convertStringtoDate(itemsTrans.get(0)));
-				tc.setCustId(itemsTrans.get(1));
-				tc.setAmount(Integer.valueOf(itemsTrans.get(2)));
+				tc.setCustId(Integer.parseInt(itemsTrans.get(1)));
+				tc.setAmount(Float.valueOf(itemsTrans.get(2)));
 				tc.setDebitrCredit(Integer.valueOf(itemsTrans.get(3)));
 				boolean isExistingUser = transactionMap.containsKey(tc.getCustId());
 				if (isExistingUser) {
 					List<Transaction> objTransList = transactionMap.get(tc.getCustId());
 					objTransList.add(tc);
-					transactionMap.put(tc.getCustId(), objTransList);
+					transactionMap.put(String.valueOf(tc.getCustId()), objTransList);
 				} else {
 					List<Transaction> objTransList = new ArrayList<Transaction>();
 					objTransList.add(tc);
-					transactionMap.put(tc.getCustId(), objTransList);
+					transactionMap.put(String.valueOf(tc.getCustId()), objTransList);
 				}
 
 			}

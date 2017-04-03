@@ -47,10 +47,23 @@ public class Constants {
 	public static final Double MIN_TXN_AMOUNT = 0.01;
 	public static final Double MAX_TXN_AMOUNT = 50000.00; 
 	
-	public static final Integer FRAUD_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("fraud_cust_percentage"));
+	//public static final Integer FRAUD_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("fraud_cust_percentage"));
+	public static final Integer FRAUD_LOW_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("lowsal_fraud_percentage"));
+	public static final Integer FRAUD_MID_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("midsal_fraud_percentage"));
+	public static final Integer FRAUD_HIGH_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("highsal_fraud_percentage"));
+	
 	public static final String CUSTOMER_NAME = props.getProperty("customerName");
 	
 	public static final String TXN_FILE_DATE_FORMAT = props.getProperty("txnFileDateFormat");
+	
+	public static final String TXN_TABLE_NAME = props.getProperty("txnTableName");
+	
+	public static final String CUST_TABLE_NAME = props.getProperty("custTableName");
+	
+	//Database config
+	public static final String DRIVER_CLASS_NAME = props.getProperty("driverCLassName");
+	public static final String DB_URL = props.getProperty("dbURL");
+	
 	private static void loadProperties() 
 	{
 		try 
