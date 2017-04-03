@@ -94,19 +94,19 @@ public class TransactionsGenerator
 	private void generateTxnsForLowSalaried(Integer customerId, Float salary, BufferedWriter fileWriter) 
 	{
 		//Normal Transaction
-		generateTxn(customerId, Constants.LOW_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
-		generateTxn(customerId, Constants.LOW_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.LOW_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.LOW_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		
 		if(fraudCustomers.contains(customerId))
 		{
 			//Fraudulant Transaction
-			generateTxn(customerId, Constants.LOW_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.LOW_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 			generateTxn(customerId, Constants.LOW_SAL_FRAUD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 		else
 		{
 			//Threshold Transaction
-			generateTxn(customerId, Constants.LOW_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.LOW_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 			generateTxn(customerId, Constants.LOW_SAL_THRESHOLD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 	}
@@ -114,19 +114,19 @@ public class TransactionsGenerator
 	private void generateTxnsForMidSalaried(Integer customerId, Float salary, BufferedWriter fileWriter) 
 	{
 		//Normal Transaction
-		generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
-		generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		
 		if(fraudCustomers.contains(customerId))
 		{
 			//Fraudulant Transaction
-			generateTxn(customerId, Constants.MID_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.MID_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 			generateTxn(customerId, Constants.MID_SAL_FRAUD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 		else
 		{
 			//Threshold Transaction
-			generateTxn(customerId, Constants.MID_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.MID_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 			generateTxn(customerId, Constants.MID_SAL_THRESHOLD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 	}
@@ -140,13 +140,13 @@ public class TransactionsGenerator
 		if(fraudCustomers.contains(customerId))
 		{
 			//Fraudulant Transaction
-			generateTxn(customerId, Constants.HIGH_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.HIGH_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 			generateTxn(customerId, Constants.HIGH_SAL_FRAUD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 		else
 		{
 			//Threshold Transaction
-			generateTxn(customerId, Constants.HIGH_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.HIGH_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 			generateTxn(customerId, Constants.HIGH_SAL_THRESHOLD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 	}
