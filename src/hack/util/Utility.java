@@ -23,4 +23,9 @@ public class Utility {
 	    bd = bd.setScale(places, RoundingMode.HALF_UP);
 	    return bd.doubleValue();
 	}
+
+	public static Integer generateRandomNumberBetween(Integer minVal, Integer maxVal) 
+	{
+		return ThreadLocalRandom.current().nextInt(minVal, maxVal);
+	}
 }

@@ -14,7 +14,19 @@ public class DateUtil
 	{
 	}
 	
-
+	public static java.sql.Date convertStringToSQLDate(String date, String format)
+	{
+		Date utilDate = parseDateInCustomFormat(date, format);
+		return convertUtilDateToSQLDate(utilDate);
+	}
+	
+	
+	public static java.sql.Date convertUtilDateToSQLDate(Date date)
+	{
+		return new java.sql.Date(date.getTime());
+	}
+	
+	
 	public static Date getBeginDate(Date date)
 	{
 		Calendar cal = Calendar.getInstance();
@@ -101,19 +113,6 @@ public class DateUtil
         cal.setTime(dMin);
         cal.add(Calendar.DATE, new Random().nextInt((int)dayDiff));          
         return cal.getTime();
-    }
-	
-	public static void main(String args[]) 
-	{
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1); // today minus one year
-        Date dMin = cal.getTime();
-        cal.add(Calendar.YEAR, 2); // today plus one year
-        Date dMax = cal.getTime();
-        
-        DateUtil rnd = new DateUtil();
-        for (int i=1; i<=10; i++)
-            System.out.println("Date = " + rnd.generateDateInBetween(dMin, dMax));
     }
 
 

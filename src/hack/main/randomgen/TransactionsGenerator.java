@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import hack.constants.Constants;
 import hack.constants.SalaryLevel;
@@ -18,9 +18,9 @@ import hack.util.Utility;
 public class TransactionsGenerator 
 {
 
-	List<Integer> fraudCustomers;
+	Set<Integer> fraudCustomers;
 	
-	public TransactionsGenerator(List<Integer> fraudCustomers)
+	public TransactionsGenerator(Set<Integer> fraudCustomers)
 	{
 		this.fraudCustomers = fraudCustomers;
 	}
@@ -38,7 +38,7 @@ public class TransactionsGenerator
 			while((line = fileReader.readLine()) != null)
 			{
 				String[] recVals = line.split(Constants.FILE_DELIMITER);
-				generateTransactions(Integer.parseInt(recVals[0]), Integer.parseInt(recVals[2]), fileWriter);
+				generateTransactions(Integer.parseInt(recVals[0]), Float.parseFloat(recVals[2]), fileWriter);
 			}
 						
 		} 
@@ -73,7 +73,7 @@ public class TransactionsGenerator
 		}
 	}
 
-	private void generateTransactions(Integer customerId, Integer salary, BufferedWriter fileWriter) 
+	private void generateTransactions(Integer customerId, Float salary, BufferedWriter fileWriter) 
 	{
 		SalaryLevel salaryLevel = getSalaryLevel(salary);
 		
@@ -81,28 +81,76 @@ public class TransactionsGenerator
 		{
 			generateTxnsForLowSalaried(customerId, salary, fileWriter);
 		}
+		else if(salaryLevel == SalaryLevel.MID_SALARIED)
+		{
+			generateTxnsForMidSalaried(customerId, salary, fileWriter);
+		}
+		else
+		{
+			generateTxnsForHighSalaried(customerId, salary, fileWriter);
+		}
 	}
 
-	private void generateTxnsForLowSalaried(Integer customerId, Integer salary, BufferedWriter fileWriter) 
+	private void generateTxnsForLowSalaried(Integer customerId, Float salary, BufferedWriter fileWriter) 
 	{
 		//Normal Transaction
 		generateTxn(customerId, Constants.LOW_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		generateTxn(customerId, Constants.LOW_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
 		
-		//if(fraudCustomers.contains(customerId))
-		//{
-			//Threshold Transaction
-			generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
-			generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
-		//}
-		//else
+		if(fraudCustomers.contains(customerId))
 		{
 			//Fraudulant Transaction
-			generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
-			generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.LOW_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.LOW_SAL_FRAUD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		}
+		else
+		{
+			//Threshold Transaction
+			generateTxn(customerId, Constants.LOW_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.LOW_SAL_THRESHOLD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
 		}
 	}
 
+	private void generateTxnsForMidSalaried(Integer customerId, Float salary, BufferedWriter fileWriter) 
+	{
+		//Normal Transaction
+		generateTxn(customerId, Constants.MID_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.MID_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
+		
+		if(fraudCustomers.contains(customerId))
+		{
+			//Fraudulant Transaction
+			generateTxn(customerId, Constants.MID_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.MID_SAL_FRAUD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		}
+		else
+		{
+			//Threshold Transaction
+			generateTxn(customerId, Constants.MID_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.MID_SAL_THRESHOLD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		}
+	}
+	
+	private void generateTxnsForHighSalaried(Integer customerId, Float salary, BufferedWriter fileWriter) 
+	{
+		//Normal Transaction
+		generateTxn(customerId, Constants.HIGH_SAL_NORMAL_CREDIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		generateTxn(customerId, Constants.HIGH_SAL_NORMAL_DEBIT_VAL, Constants.FROM_DATE, Constants.THRESHOLD_DATE, Constants.CREDIT_TXN_CODE, fileWriter);
+		
+		if(fraudCustomers.contains(customerId))
+		{
+			//Fraudulant Transaction
+			generateTxn(customerId, Constants.HIGH_SAL_FRAUD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.HIGH_SAL_FRAUD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		}
+		else
+		{
+			//Threshold Transaction
+			generateTxn(customerId, Constants.HIGH_SAL_THRESHOLD_CREDIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+			generateTxn(customerId, Constants.HIGH_SAL_THRESHOLD_DEBIT_VAL, Constants.THRESHOLD_DATE, Constants.TO_DATE, Constants.DEBIT_TXN_CODE, fileWriter);
+		}
+	}
+	
 	private void generateTxn(Integer customerId, Integer lowSalNormalCreditVal, String fromDateStr, String thresholdDateStr, Integer txnCode, BufferedWriter fileWriter) 
 	{
 		Date fromDate = DateUtil.parseDateInCustomFormat(fromDateStr, Constants.DATE_FORMAT);
@@ -156,7 +204,7 @@ public class TransactionsGenerator
 		}
 	}
 
-	private SalaryLevel getSalaryLevel(Integer salary) 
+	private SalaryLevel getSalaryLevel(Float salary) 
 	{
 		if(salary > 0 && salary <= Constants.LOW_SALARY_VAL)
 		{

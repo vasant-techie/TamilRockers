@@ -1,43 +1,60 @@
 package hack.intelligence;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 
 import hack.constants.Constants;
 import hack.dao.DBUtility;
+import hack.util.Utility;
 
 public class Intelligence {
 
-	public static List<Integer> calculateFraudCustomers() 
+	private static final Integer FRAUD_CUST_COUNT = (int)(Constants.NUM_OF_CUSTOMERS * (Constants.FRAUD_CUST_COUNT_PERCENTAGE / 100.0f));
+	
+	public static Set<Integer> calculateFraudCustomers() 
 	{
-		List<Integer> chosenFraudCustomerIds = new ArrayList<>();
+		Set<Integer> fraudCustList = new HashSet<Integer>();
 		
-		System.out.println("Total Num of Customers: " + Constants.NUM_OF_CUSTOMERS);
-		int lowSalCount = (int)(Constants.NUM_OF_CUSTOMERS*(Constants.LOW_SAL_CUST_PERCENTAGE/100.0f));
-		int midSalCount = (int)(Constants.NUM_OF_CUSTOMERS*(Constants.MID_SAL_CUST_PERCENTAGE/100.0f));
-		int highSalCount = (int)(Constants.NUM_OF_CUSTOMERS*(Constants.HIGH_SAL_CUST_PERCENTAGE/100.0f));
+		List<Integer> custIdList = DBUtility.fetchCustomerIds();
 		
-		System.out.println("Low Sal Count: " + lowSalCount);
-		System.out.println("Mid Sal Count: " + midSalCount);
-		System.out.println("High Sal Count: " + highSalCount);
+		for(int iter = 0; iter < FRAUD_CUST_COUNT; iter++)
+		{
+			Integer randVal = Utility.generateRandomNumberBetween(1, custIdList.size());
+			
+			while(true)
+			{
+				if(!fraudCustList.contains(custIdList.get(randVal)))
+				{
+					fraudCustList.add(custIdList.get(randVal));
+					break;
+				}
+			}
+		}
 		
-		int lowSalFraudCustCount = (int)(lowSalCount*(Constants.FRAUD_LOW_SAL_CUST_COUNT_PERCENTAGE/100.0f));
-		int midSalFraudCustCount = (int)(midSalCount*(Constants.FRAUD_MID_SAL_CUST_COUNT_PERCENTAGE/100.0f));
-		int highSalFraudCustCount = (int)(highSalCount*(Constants.FRAUD_HIGH_SAL_CUST_COUNT_PERCENTAGE/100.0f));
-		
-		System.out.println("Low Sal Fraud Cust Count" + lowSalFraudCustCount);
-		System.out.println("Mid Sal Fraud Cust Count" + midSalFraudCustCount);
-		System.out.println("High Sal Fraud Cust Count" + highSalFraudCustCount);
-
-		List<Integer> losSalCustomerIds = DBUtility.loadCustomerIdsOfSalBetween(0, Constants.LOW_SALARY_VAL);
-		chosenFraudCustomerIds.addAll(losSalCustomerIds);
-
-		return chosenFraudCustomerIds;
+		return fraudCustList;
 	}
 	
-	
-	
-
+	public static void writeToFile(Set<Integer> fraudCustList)
+	{
+		File fraudCustFile = FileUtils.getFile(Constants.SELECTED_FRAUD_CUST_FILE);
+		FileUtils.deleteQuietly(fraudCustFile);
+		
+		try
+		{
+			FileUtils.writeLines(fraudCustFile, fraudCustList);
+			System.out.println("Done with writing chosen fraudulant customers..");
+		}
+		catch(IOException ex)
+		{
+			ex.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		calculateFraudCustomers();

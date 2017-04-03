@@ -6,32 +6,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import hack.constants.Constants;
-import hack.pojo.MasterPojo;
-import hack.pojo.Transaction;
 import hack.util.DateUtil;
 
 public class DBUtility {
 
 
-	public static void main(String[] args) throws IOException 
+	private DBUtility()
 	{
-		createConnection();
-		insertCustomerDatatoDB();
-		// insertTransactionDatatoDB();
-		// insertRestaurants(5, "LaVals", "Berkeley");
-		// selectRestaurants();
-		//shutdown();
 	}
 
-	private static Connection createConnection() 
+	private static Connection getConnection() 
 	{
 		Connection conn = null;
 		
@@ -81,127 +74,108 @@ public class DBUtility {
 
 	// To fetch file and insert to db
 
-	public static String insertTransactionDatatoDB() throws IOException 
+	public static void insertTransactionDatatoDB() throws IOException 
 	{
 
 		String fileName = Constants.TXN_DATA_FILE_NAME;
 
-		Transaction tc = new Transaction();
 		List<String> items = new ArrayList<String>();
 		File file = new File(fileName);
 
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		StringBuffer stringBuffer = new StringBuffer();
-		String line;
-
-		while ((line = bufferedReader.readLine()) != null) {
-
-			stringBuffer.append(line);
-			stringBuffer.append("\n");
-
-			items = Arrays.asList(line.split("\\s*" + Constants.FILE_DELIMITER + "\\s*"));
-
-			tc.setTransDate(DateUtil.parseDateInCustomFormat(items.get(0), Constants.TXN_FILE_DATE_FORMAT));
-			tc.setCustId(Integer.valueOf(items.get(1)));
-			tc.setAmount(Float.valueOf(items.get(2)));
-			tc.setDebitrCredit(Integer.valueOf(items.get(3)));
-
-			insertDatatoTranstoDB(tc.getTransDate(), tc.getCustId(), tc.getAmount(), tc.getDebitrCredit());
-
-		}
-
-		fileReader.close();
-
-		return "SUCCESS";
-	}
-
-	// insert
-	private static void insertDatatoTranstoDB(Date transDate, int custId, float amount, int debitorcredit) 
-	{
-		String tableName = Constants.TXN_TABLE_NAME;
-		String sqlQry = null;
-		
 		Connection conn = null;
-		Statement stmt = null;
-		try {
-			String formattedDate = DateUtil.formatDate(transDate, "MM/dd/yyyy");
-
-			conn = createConnection();
-			stmt = conn.createStatement();
-			sqlQry = "insert into " + tableName + "(TransDate,Customer_ID,AMOUNT,CREDIT_DEBIT_FLAG)" + " values ('"
-					+ formattedDate + "'," + custId + "," + amount + "," + debitorcredit + ")";
-			System.out.println(sqlQry);
-			stmt.execute(sqlQry);
-		} 
-		catch (SQLException sqlExcept) 
+		
+		PreparedStatement pstmt = null;
+		BufferedReader bufferedReader = null;
+		try
 		{
-			sqlExcept.printStackTrace();
+			bufferedReader = new BufferedReader(new FileReader(file));
+			String line;
+
+			conn = getConnection();
+			
+			String sqlQuery = "INSERT INTO " + Constants.TXN_TABLE_NAME 
+					+ " (TRANSDATE, CUSTOMER_ID, AMOUNT, CREDIT_DEBIT_FLAG) "
+					+ " VALUES (?,?,?,?)";
+			pstmt = conn.prepareStatement(sqlQuery);
+			
+			while ((line = bufferedReader.readLine()) != null) 
+			{
+				items = Arrays.asList(line.split("\\s*" + Constants.FILE_DELIMITER + "\\s*"));
+	
+				pstmt.setDate(1, DateUtil.convertStringToSQLDate(items.get(0), Constants.TXN_FILE_DATE_FORMAT));
+				pstmt.setInt(2, Integer.valueOf(items.get(1)));
+				pstmt.setFloat(3, Float.valueOf(items.get(2)));
+				pstmt.setInt(4, Integer.valueOf(items.get(3)));
+				
+				pstmt.addBatch();
+			}
+
+			pstmt.executeBatch();
+		}
+		catch(SQLException sqlException)
+		{
+			sqlException.printStackTrace();
 		}
 		finally
 		{
-			closeStatement(stmt);
+			closeStatement(pstmt);
 			closeConnection(conn);
+			
+			if(null != bufferedReader)
+				bufferedReader.close();
 		}
 	}
+
+
 
 	// insert to cust db
 	// To fetch file and insert to db
 
-	public static String insertCustomerDatatoDB() throws IOException {
-
-		String fileName = Constants.CUST_DATA_FILE_NAME;
-
-		MasterPojo mp = new MasterPojo();
+	public static void insertCustomerDatatoDB() throws IOException 
+	{
 		List<String> items = new ArrayList<String>();
-		File file = new File(fileName);
+		File file = new File(Constants.CUST_DATA_FILE_NAME);
 
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		StringBuffer stringBuffer = new StringBuffer();
-		String line;
-
-		while ((line = bufferedReader.readLine()) != null) {
-
-			stringBuffer.append(line);
-			stringBuffer.append("\n");
-
-			items = Arrays.asList(line.split("\\s*" + Constants.FILE_DELIMITER + "\\s*"));
-
-			mp.setCustId(Integer.valueOf(items.get(0)));
-			mp.setFirstName(items.get(1));
-			mp.setSalary(Float.valueOf(items.get(2)));
-
-			insertDatatoCusttoDB(mp.getCustId(), mp.getFirstName(), mp.getSalary());
-
-		}
-
-		fileReader.close();
-
-		return "SUCCESS";
-	}
-
-	private static void insertDatatoCusttoDB(int custId, String firstName, float salary) {
-		String tableName = Constants.CUST_TABLE_NAME;
-		String sqlQry = null;
 		Connection conn = null;
-		Statement stmt = null;
-		try {
-			conn = createConnection();
-			stmt = conn.createStatement();
-			sqlQry = "insert into " + tableName + "(Customer_ID,FIRSTNAME,SALARY)" + " values (" + custId + ",'"
-					+ firstName + "'," + salary + ")";
-			System.out.println(sqlQry);
-			stmt.execute(sqlQry);
-		} 
-		catch (SQLException sqlExcept) 
+		PreparedStatement pstmt = null;
+		
+		BufferedReader bufferedReader = null;
+		
+		try
 		{
-			sqlExcept.printStackTrace();
+			bufferedReader = new BufferedReader(new FileReader(file));
+			String line;
+		
+			conn = getConnection();
+			String sqlQuery = "INSERT INTO " + Constants.CUST_TABLE_NAME + " (CUSTOMER_ID, NAME, SALARY) " +
+								" VALUES (?,?,?)";
+			
+
+			pstmt = conn.prepareStatement(sqlQuery);
+			
+			while ((line = bufferedReader.readLine()) != null) 
+			{
+				items = Arrays.asList(line.split("\\s*" + Constants.FILE_DELIMITER + "\\s*"));
+
+				pstmt.setInt(1, Integer.valueOf(items.get(0)));
+				pstmt.setString(2, items.get(1));
+				pstmt.setFloat(3, Float.valueOf(items.get(2)));
+
+				pstmt.addBatch();
+			}
+			
+			pstmt.executeBatch();
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
 		}
 		finally
 		{
-			closeStatement(stmt);
+			closeStatement(pstmt);
 			closeConnection(conn);
+			if(null != bufferedReader)
+				bufferedReader.close();
 		}
 	}
 
@@ -213,7 +187,7 @@ public class DBUtility {
 		List<Integer> custIds = new ArrayList<>();
 		try
 		{
-			conn = createConnection();
+			conn = getConnection();
 			stmt = conn.createStatement();
 			
 			//SELECT Customer_ID
@@ -230,5 +204,59 @@ public class DBUtility {
 		}
 		
 		return custIds;
+	}
+	
+	public static List<Integer> fetchCustomerIds()
+	{
+		List<Integer> custIdList = new ArrayList<>();
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try
+		{
+			conn = getConnection();
+			stmt = conn.createStatement();
+			
+			String sqlQuery = "SELECT CUSTOMER_ID FROM " + Constants.CUST_TABLE_NAME;
+			ResultSet results = stmt.executeQuery(sqlQuery);
+			
+			while(results.next())
+			{
+				custIdList.add(results.getInt(1));
+			}
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			closeStatement(stmt);
+			closeConnection(conn);
+		}
+		
+		return custIdList;
+	}
+	
+	public static void refreshDatabase()
+	{
+		Connection conn = getConnection();
+		Statement stmt = null;
+		
+		try
+		{
+			stmt = conn.createStatement();
+			stmt.execute("DELETE FROM " + Constants.CUST_TABLE_NAME);
+			stmt.execute("DELETE FROM " + Constants.TXN_TABLE_NAME);
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			closeStatement(stmt);
+			closeConnection(conn);
+		}
 	}
 }
