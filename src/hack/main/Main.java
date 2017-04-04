@@ -13,6 +13,9 @@ public class Main {
 	{
 		try
 		{
+			DBUtility.createDatabase();
+			System.out.println("Table Created Succesfully");
+						
 			DBUtility.refreshDatabase();
 			System.out.println("Done with refreshing database..");
 			
@@ -31,10 +34,12 @@ public class Main {
 			System.out.println("Done with inserting transaction data into database..");
 			
 			Intelligence.generateFradulantCustomerData();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		catch(IOException ex)
-		{
-			ex.printStackTrace();
+		finally{
+			
 		}
 	}
 

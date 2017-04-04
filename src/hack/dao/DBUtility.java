@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -353,28 +354,34 @@ public class DBUtility {
 	}
 	
 	
-	public static Integer insertResult(List<ResultData> resultDataLst) {
+	public static Integer insertResult(List<ResultData> resultDataLst) 
+	{
 		Integer count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
-		try {
+		try 
+		{
 			conn = DBUtility.getConnection();
 			String sqlQuery = Constants.INSERT_RESULT;
 			pstmt = conn.prepareStatement(sqlQuery);
 			
-			for(ResultData rd : resultDataLst){
-				
-			pstmt.setInt(1, rd.getCustomer_Id());
-			pstmt.setInt(2, rd.getCredit_transaction());
-			pstmt.setInt(3, rd.getDebit_transaction());
-			pstmt.setInt(4, rd.getIs_fraudulant());
-			pstmt.addBatch();
+			for(ResultData rd : resultDataLst)
+			{	
+				pstmt.setInt(1, rd.getCustomer_Id());
+				pstmt.setInt(2, rd.getCredit_transaction());
+				pstmt.setInt(3, rd.getDebit_transaction());
+				pstmt.setInt(4, rd.getIs_fraudulant());
+				pstmt.addBatch();
 			}
 			pstmt.executeBatch();
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
-		} finally {
+		} 
+		finally 
+		{
 			closeStatement(pstmt);
 			closeConnection(conn);
 		}
@@ -382,6 +389,42 @@ public class DBUtility {
 
 	}
 
+	public static void createDatabase()
+	{
+		Connection conn = getConnection();
+		Statement stmt = null;
+		
+		try
+		{
+			DatabaseMetaData dbm = conn.getMetaData();
+			// check if "employee" table is there
+			stmt = conn.createStatement();
+			ResultSet Custtables = dbm.getTables(null, null, Constants.CUST_TABLE_NAME, null);
+			ResultSet Txntables = dbm.getTables(null, null, Constants.TXN_TABLE_NAME, null);
+			if ((!Custtables.next())) {
+				stmt.execute("CREATE TABLE "+Constants.CUST_TABLE_NAME+"(Customer_ID int,NAME varchar(30),SALARY float)"); 
+				System.out.println(Constants.CUST_TABLE_NAME+ "Table created");
+			}else{
+				System.out.println(Constants.CUST_TABLE_NAME+ "Table Already Exist");
+			}
+			if ((!Txntables.next())) {
+				stmt.execute("CREATE TABLE "+Constants.TXN_TABLE_NAME+"(TRANSDATE DATE, CUSTOMER_ID int, AMOUNT float, CREDIT_DEBIT_FLAG int)"); 
+				System.out.println(Constants.TXN_TABLE_NAME+ "Table created");
+			}else{
+				System.out.println(Constants.TXN_TABLE_NAME+ "Table Already Exist");
+			}
+			
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			closeStatement(stmt);
+			closeConnection(conn);
+		}
+	}
 	
 	
 }
