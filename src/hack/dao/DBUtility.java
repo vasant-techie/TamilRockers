@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import hack.constants.Constants;
+import hack.pojo.ResultData;
 import hack.util.DateUtil;
 
 public class DBUtility {
@@ -259,4 +260,128 @@ public class DBUtility {
 			closeConnection(conn);
 		}
 	}
+	
+	
+	public static List<Integer> getCustomersSalariedBetween(float minSal, float maxSal) {
+		List<Integer> custIdList = new ArrayList<Integer>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBUtility.getConnection();
+			String sqlQuery = Constants.CUST_SALARIED_BETWEEN;
+			pstmt = conn.prepareStatement(sqlQuery);
+			pstmt.setFloat(1, minSal);
+			pstmt.setFloat(2, maxSal);
+			ResultSet results = pstmt.executeQuery();
+
+			while (results.next()) {
+				custIdList.add(results.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeStatement(pstmt);
+			closeConnection(conn);
+		}
+		return custIdList;
+
+	}
+	
+	
+	
+	public static Integer getTxnCountofCustomer(Integer custId , Integer txnCode) {
+		Integer count = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBUtility.getConnection();
+			String sqlQuery = Constants.TXN_CODE_COUNT_CUSTOMER;
+			pstmt = conn.prepareStatement(sqlQuery);
+			pstmt.setFloat(1, custId);
+			pstmt.setFloat(2, txnCode);
+			ResultSet results = pstmt.executeQuery(sqlQuery);
+
+			while (results.next()) {
+				count = results.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeStatement(pstmt);
+			closeConnection(conn);
+		}
+		return count;
+
+	}
+	
+	public static Integer getTxnCountofCustomer(Integer custId , Integer txnCode, java.sql.Date beginDate, java.sql.Date endDate) 
+	{
+		Integer count = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBUtility.getConnection();
+			String sqlQuery = Constants.COUNT_OF_TXN_CODE_BETWEEN;
+			pstmt = conn.prepareStatement(sqlQuery);
+			pstmt.setFloat(1, custId);
+			pstmt.setFloat(2, txnCode);
+			pstmt.setDate(3, beginDate);
+			pstmt.setDate(4, endDate);
+			ResultSet results = pstmt.executeQuery();
+
+			while (results.next()) {
+				count = results.getInt(1);
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
+		finally 
+		{
+			closeStatement(pstmt);
+			closeConnection(conn);
+		}
+		return count;
+
+	}
+	
+	
+	public static Integer insertResult(List<ResultData> resultDataLst) {
+		Integer count = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBUtility.getConnection();
+			String sqlQuery = Constants.INSERT_RESULT;
+			pstmt = conn.prepareStatement(sqlQuery);
+			
+			for(ResultData rd : resultDataLst){
+				
+			pstmt.setInt(1, rd.getCustomer_Id());
+			pstmt.setInt(2, rd.getCredit_transaction());
+			pstmt.setInt(3, rd.getDebit_transaction());
+			pstmt.setInt(4, rd.getIs_fraudulant());
+			pstmt.addBatch();
+			}
+			pstmt.executeBatch();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeStatement(pstmt);
+			closeConnection(conn);
+		}
+		return count;
+
+	}
+
+	
+	
 }

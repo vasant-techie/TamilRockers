@@ -29,13 +29,13 @@ public class CustomerDataGen
 			generateData(custMasterFile, midSalCount, Constants.LOW_SALARY_VAL + 1, Constants.MID_SALARY_VAL);
 			generateData(custMasterFile, highSalCount, Constants.MID_SALARY_VAL + 1, Constants.HIGH_SALARY_VAL);
 		} 
-		catch (IOException e) 
+		catch (IOException ex) 
 		{
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 	}
 
-	private void generateData(File custMasterFile, int lowSalCount, int minSalary, int maxSalary) throws IOException {
+	private void generateData(File custMasterFile, int lowSalCount, float minSalary, float maxSalary) throws IOException {
 		StringBuilder custRecord = new StringBuilder();
 		for(int iter = 0; iter < lowSalCount; iter++)
 		{
@@ -50,7 +50,7 @@ public class CustomerDataGen
 			custRecord.append(custName);
 			custRecord.append(Constants.FILE_DELIMITER);
 			//Salary
-			int salary = generateSalary(minSalary, maxSalary);
+			float salary = generateSalary(minSalary, maxSalary);
 			custRecord.append(salary);
 			
 			//Inserting new line
@@ -60,17 +60,13 @@ public class CustomerDataGen
 		}
 	}
 	
-	private int generateSalary(int min, int max)
+	private float generateSalary(float min, float max)
 	{
-		return ThreadLocalRandom.current().nextInt(min, max + 1);
+		return Double.valueOf(ThreadLocalRandom.current().nextDouble(min, max + 1)).floatValue();
 	}
 
 	private int generateCustId(Integer customerId)
 	{
-		//int max = Constants.CUST_ID_BEGIN_VAL + Constants.NUM_OF_CUSTOMERS + 1;
-		//return ThreadLocalRandom.current().nextInt(Constants.CUST_ID_BEGIN_VAL, max);
-		//return ThreadLocalRandom.current().ints(Constants.CUST_ID_BEGIN_VAL, max).distinct().limit(maxSize);
-		
 		customerId = customerId + 1;
 		return customerId;
 	}

@@ -17,9 +17,9 @@ public class Constants {
 	public static final String CUST_DATA_FILE_NAME = props.getProperty("input_cust_file_name");
 	public static final String TXN_DATA_FILE_NAME = props.getProperty("input_txn_file_name");
 	public static final String FILE_DELIMITER = props.getProperty("file_delimiter");
-	public static final Integer LOW_SALARY_VAL = Integer.parseInt(props.getProperty("lowsal"));
-	public static final Integer MID_SALARY_VAL = Integer.parseInt(props.getProperty("midsal"));
-	public static final Integer HIGH_SALARY_VAL = Integer.parseInt(props.getProperty("highsal"));
+	public static final Float LOW_SALARY_VAL = Float.parseFloat(props.getProperty("lowsal"));
+	public static final Float MID_SALARY_VAL = Float.parseFloat(props.getProperty("midsal"));
+	public static final Float HIGH_SALARY_VAL = Float.parseFloat(props.getProperty("highsal"));
 	
 	public static final Integer LOW_SAL_NORMAL_CREDIT_VAL = Integer.parseInt(props.getProperty("lowsal_normal_credit"));
 	public static final Integer LOW_SAL_NORMAL_DEBIT_VAL = Integer.parseInt(props.getProperty("lowsal_normal_debit"));
@@ -67,9 +67,9 @@ public class Constants {
 	public static final Double MAX_TXN_AMOUNT = 50000.00; 
 	
 	public static final Integer FRAUD_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("fraud_cust_percentage"));
-	public static final Integer FRAUD_LOW_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("lowsal_fraud_percentage"));
-	public static final Integer FRAUD_MID_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("midsal_fraud_percentage"));
-	public static final Integer FRAUD_HIGH_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("highsal_fraud_percentage"));
+	//public static final Integer FRAUD_LOW_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("lowsal_fraud_percentage"));
+	//public static final Integer FRAUD_MID_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("midsal_fraud_percentage"));
+	//public static final Integer FRAUD_HIGH_SAL_CUST_COUNT_PERCENTAGE = Integer.parseInt(props.getProperty("highsal_fraud_percentage"));
 	
 	public static final String CUSTOMER_NAME = props.getProperty("customerName");
 	
@@ -83,6 +83,12 @@ public class Constants {
 	public static final String DRIVER_CLASS_NAME = props.getProperty("driverClassName");
 	public static final String DB_URL = props.getProperty("dbURL");
 	public static final String SELECTED_FRAUD_CUST_FILE = props.getProperty("chosenFraudCustFile");
+	public static final String CUST_SALARIED_BETWEEN =  props.getProperty("custSalariedBetween");
+	public static final String TXN_CODE_COUNT_CUSTOMER =  props.getProperty("txnCodeCountofCustomer");
+	public static final String COUNT_OF_TXN_CODE_BETWEEN = props.getProperty("countOfTxnBetweenDate");
+	public static final String INSERT_RESULT = props.getProperty("insertResult");
+	
+	
 	
 	private static void loadProperties() 
 	{

@@ -7,11 +7,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class DateUtil 
 {
 	private DateUtil()
 	{
+	}
+	
+	public static int fetchDateUtilbetTwoDates(Date date1,Date date2){
+		long diff = date2.getTime() - date1.getTime();
+	    return (int) (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)); 
 	}
 	
 	public static java.sql.Date convertStringToSQLDate(String date, String format)
@@ -94,6 +100,12 @@ public class DateUtil
 		}
 		
 		return null;
+	}
+	
+	public static Integer numOfDaysBetween(Date beginDate, Date endDate)
+	{
+		return null;
+		
 	}
 	
 	public static Date generateDateInBetween(Date dMin, Date dMax) 

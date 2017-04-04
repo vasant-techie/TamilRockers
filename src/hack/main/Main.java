@@ -29,6 +29,8 @@ public class Main {
 			
 			DBUtility.insertTransactionDatatoDB();
 			System.out.println("Done with inserting transaction data into database..");
+			
+			Intelligence.generateFradulantCustomerData();
 		}
 		catch(IOException ex)
 		{
