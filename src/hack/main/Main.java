@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import hack.dao.DBUtility;
 import hack.intelligence.Intelligence;
-import hack.main.randomgen.CustomerDataGen;
-import hack.main.randomgen.TransactionsGenerator;
+import hack.sourceGenerator.CustomerDataGen;
+import hack.sourceGenerator.TransactionsGenerator;
 
 public class Main {
 
@@ -35,7 +35,6 @@ public class Main {
 			
 			Intelligence.generateFradulantCustomerData();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally{

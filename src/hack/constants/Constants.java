@@ -7,6 +7,10 @@ import java.util.Properties;
 
 public class Constants {
 	
+	private Constants()
+	{
+	}
+	
 	private static final String CONFIG_FILE = "config" + File.separator + "master.properties";
 	private static Properties props = new Properties();
 	static
@@ -79,6 +83,8 @@ public class Constants {
 	
 	public static final String CUST_TABLE_NAME = props.getProperty("custTableName");
 	
+	public static final String RESULT_TABLE_NAME = props.getProperty("resultTableName");
+	
 	//Database config
 	public static final String DRIVER_CLASS_NAME = props.getProperty("driverClassName");
 	public static final String DB_URL = props.getProperty("dbURL");
@@ -88,7 +94,12 @@ public class Constants {
 	public static final String COUNT_OF_TXN_CODE_BETWEEN = props.getProperty("countOfTxnBetweenDate");
 	public static final String INSERT_RESULT = props.getProperty("insertResult");
 	
+	public static final Float THRESHOLD_CREDIT_VARIANCE_PERCENTAGE = Float.valueOf(props.getProperty("thresholdCreditVariancePercentage"));
 	
+	public static final Float THRESHOLD_DEBIT_VARIANCE_PERCENTAGE = Float.valueOf(props.getProperty("thresholdDebitVariancePercentage"));
+	
+	public static final Integer FRAUD_CUST_CODE = 1;
+	public static final Integer SAFE_CUST_CODE = 0;
 	
 	private static void loadProperties() 
 	{

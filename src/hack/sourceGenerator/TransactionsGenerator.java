@@ -1,4 +1,4 @@
-package hack.main.randomgen;
+package hack.sourceGenerator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -151,7 +151,7 @@ public class TransactionsGenerator
 		}
 	}
 	
-	private void generateTxn(Integer customerId, Integer lowSalNormalCreditVal, String fromDateStr, String thresholdDateStr, Integer txnCode, BufferedWriter fileWriter) 
+	private void generateTxn(Integer customerId, Integer txnCount, String fromDateStr, String thresholdDateStr, Integer txnCode, BufferedWriter fileWriter) 
 	{
 		Date fromDate = DateUtil.parseDateInCustomFormat(fromDateStr, Constants.DATE_FORMAT);
 		Date thresholdDate = DateUtil.parseDateInCustomFormat(thresholdDateStr, Constants.DATE_FORMAT);
@@ -160,16 +160,16 @@ public class TransactionsGenerator
 		Date date = DateUtil.parseDateInCustomFormat(fromDateStr, Constants.DATE_FORMAT);
 		for(int iter = 0; iter < numberOfMonthsBetween; iter++)
 		{
-			generateTxnForAMonth(customerId, lowSalNormalCreditVal, date, fileWriter, txnCode);
+			generateTxnForAMonth(customerId, txnCount, date, fileWriter, txnCode);
 			date = DateUtil.addOneMonthToDate(date);
 		}
 	}
 
-	private void generateTxnForAMonth(Integer customerId, Integer lowSalNormalCreditVal, Date date, BufferedWriter fileWriter, Integer TXN_CODE) 
+	private void generateTxnForAMonth(Integer customerId, Integer txnCount, Date date, BufferedWriter fileWriter, Integer TXN_CODE) 
 	{
 		//TODO: To make <= lowSalNormalCreditVal
 		StringBuilder record = new StringBuilder();
-		for(int iter = 0; iter < lowSalNormalCreditVal; iter++)
+		for(int iter = 0; iter < txnCount; iter++)
 		{
 			record.setLength(0);
 			Date beginDate = DateUtil.getBeginDate(date);

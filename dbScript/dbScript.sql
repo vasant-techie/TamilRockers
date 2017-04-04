@@ -2,6 +2,4 @@ create table CUSTOMERDATA (Customer_ID int,NAME varchar(30),SALARY float);
 
 create table TRANSACTIONDATA(TRANSDATE DATE, CUSTOMER_ID int, AMOUNT float, CREDIT_DEBIT_FLAG int);
 
-select * from CUSTOMERDATA;
-
 create table RESULTDATA (Customer_ID int,CREDIT_TRANSACTION int,DEBIT_TRANSACTION int,IS_FRAUDULANT int)

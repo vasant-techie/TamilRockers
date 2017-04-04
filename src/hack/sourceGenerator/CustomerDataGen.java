@@ -1,4 +1,4 @@
-package hack.main.randomgen;
+package hack.sourceGenerator;
 
 import java.io.File;
 import java.io.IOException;

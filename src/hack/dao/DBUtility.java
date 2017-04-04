@@ -250,6 +250,7 @@ public class DBUtility {
 			stmt = conn.createStatement();
 			stmt.execute("DELETE FROM " + Constants.CUST_TABLE_NAME);
 			stmt.execute("DELETE FROM " + Constants.TXN_TABLE_NAME);
+			stmt.execute("DELETE FROM " + Constants.RESULT_TABLE_NAME);
 		}
 		catch(SQLException ex)
 		{
@@ -401,6 +402,7 @@ public class DBUtility {
 			stmt = conn.createStatement();
 			ResultSet Custtables = dbm.getTables(null, null, Constants.CUST_TABLE_NAME, null);
 			ResultSet Txntables = dbm.getTables(null, null, Constants.TXN_TABLE_NAME, null);
+			ResultSet Rsttables = dbm.getTables(null, null, Constants.RESULT_TABLE_NAME, null);
 			if ((!Custtables.next())) {
 				stmt.execute("CREATE TABLE "+Constants.CUST_TABLE_NAME+"(Customer_ID int,NAME varchar(30),SALARY float)"); 
 				System.out.println(Constants.CUST_TABLE_NAME+ "Table created");
@@ -413,7 +415,12 @@ public class DBUtility {
 			}else{
 				System.out.println(Constants.TXN_TABLE_NAME+ "Table Already Exist");
 			}
-			
+			if ((!Rsttables.next())) {
+				stmt.execute("CREATE TABLE "+Constants.RESULT_TABLE_NAME+"(Customer_ID int,CREDIT_TRANSACTION int,DEBIT_TRANSACTION int,IS_FRAUDULANT int)"); 
+				System.out.println(Constants.RESULT_TABLE_NAME+ "Table created");
+			}else{
+				System.out.println(Constants.RESULT_TABLE_NAME+ "Table Already Exist");
+			}
 		}
 		catch(SQLException ex)
 		{

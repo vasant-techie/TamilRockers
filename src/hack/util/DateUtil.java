@@ -15,7 +15,7 @@ public class DateUtil
 	{
 	}
 	
-	public static int fetchDateUtilbetTwoDates(Date date1,Date date2){
+	public static int fetchNumOfDaysBetween(Date date1,Date date2){
 		long diff = date2.getTime() - date1.getTime();
 	    return (int) (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)); 
 	}
