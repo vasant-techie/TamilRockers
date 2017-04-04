@@ -107,6 +107,21 @@ public class Intelligence
 					);
 			
 			System.out.println("# of Debit Txn Before Threshold: " + numDebitTxnCountBeforeThreshold);
+			
+			
+			//karthik
+			Integer betweenDates = DateUtil.fetchDateUtilbetTwoDates(DateUtil.convertStringToSQLDate(Constants.FROM_DATE, Constants.DATE_FORMAT),
+					DateUtil.convertStringToSQLDate(Constants.THRESHOLD_DATE, Constants.DATE_FORMAT));
+			System.out.println(betweenDates);
+			
+			
+			//average
+			Float creditAvg = (float) (numCreditTxnCountBeforeThreshold/betweenDates);
+			
+			System.out.println(creditAvg);
+			
+			
+			
 		}
 		
 		
